@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>AJAX TEST</title>
+    </head>
+    <body>
+        <input id="ajax" type="text" />
+        <button onclick="ajax()">AJAX</button>
+        <span id="demo"></span>
+        <script>
+            function ajax() {
+                var data = document.getElementById("ajax").value;
+
+                var xmlhttp = new XMLHttpRequest();
+                console.log(xmlhttp);
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        alert(this.responseText);
+                    }
+                }
+                xmlhttp.open("GET", "response.php?data=" + data, true);
+                xmlhttp.send();
+            }
+        </script>
+    </body>
+</html>
