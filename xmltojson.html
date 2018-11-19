@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #a, #b {
+                float: left;
+                width: 510px;
+            }
+            #a div, #b div {
+                float: left;
+                border: 1px solid black;
+                width: 100px;
+                height: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="a">
+            <div>종목
+                <div id="jongmok"></div>
+            </div>
+            <div>시가
+                <div id="startjuka"></div>
+            </div>
+            <div>대비
+                <div id="debi"></div>
+            </div>
+            <div>등락
+                <div id="dungrak"></div>
+            </div>
+            <div>PER
+                <div id="per"></div>
+            </div>
+        </div>
+        <div id="b">
+            <div>현재가
+                <div id="curjuka"></div>
+            </div>
+            <div>최고가
+                <div id="highjuka"></div>
+            </div>
+            <div>최저가
+                <div id="lowjuka"></div>
+            </div>
+            <div>거래량
+                <div id="volume"></div>
+            </div>
+            <div>매도잔량
+                <div id="medojan"></div>
+            </div>
+            <div>매수잔량
+                <div id="mesujan"></div>
+            </div>
+        </div>
+        <script>
+            var doc1;
+            var i = 0;
+            var xhttp = new XMLHttpRequest();
+            setInterval(function loadDoc1() {
+                xhttp.onreadystatechange = function() {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        doc1 = JSON.parse(xhttp.responseText);
+                        document.getElementById("jongmok").innerText = doc1.TBL_StockInfo["@attributes"].JongName;
+                        document.getElementById("startjuka").innerText = doc1.TBL_StockInfo["@attributes"].StartJuka;
+                        document.getElementById("debi").innerText = doc1.TBL_StockInfo["@attributes"].Debi;
+                        var icon;
+                        if (doc1.TBL_StockInfo["@attributes"].DungRak == 1) {
+                            icon = "↑↑";
+                        } else if (doc1.TBL_StockInfo["@attributes"].DungRak == 2) {
+                            icon = "↑";
+                        } else if (doc1.TBL_StockInfo["@attributes"].DungRak == 3) {
+                            icon = "-";
+                        } else if (doc1.TBL_StockInfo["@attributes"].DungRak == 4) {
+                            icon = "↓";
+                        } else if (doc1.TBL_StockInfo["@attributes"].DungRak == 5) {
+                            icon = "↓↓";
+                        }
+                        document.getElementById("dungrak").innerText = icon;
+                        document.getElementById("per").innerText = doc1.TBL_StockInfo["@attributes"].Per + "배";
+                        document.getElementById("curjuka").innerText = doc1.TBL_StockInfo["@attributes"].CurJuka;
+                        document.getElementById("highjuka").innerText = doc1.TBL_StockInfo["@attributes"].HighJuka;
+                        document.getElementById("lowjuka").innerText = doc1.TBL_StockInfo["@attributes"].LowJuka;
+                        document.getElementById("volume").innerText = doc1.TBL_StockInfo["@attributes"].Volume;
+                        document.getElementById("medojan").innerText = parseInt(doc1.TBL_Hoga['@attributes'].medoJan0.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].medoJan1.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].medoJan2.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].medoJan3.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].medoJan4.split(',').join(''));
+                        document.getElementById("mesujan").innerText = parseInt(doc1.TBL_Hoga['@attributes'].mesuJan0.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].mesuJan1.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].mesuJan2.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].mesuJan3.split(',').join('')) + parseInt(doc1.TBL_Hoga['@attributes'].mesuJan4.split(',').join(''));
+                    }
+                };
+                xhttp.open("GET", "xmltojson.php", true);
+                xhttp.send();
+                i++;
+
+                console.log(i);
+            }, 20000);
+        </script>
+    </body>
+</html>
